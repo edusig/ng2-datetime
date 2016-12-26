@@ -15,6 +15,7 @@ import { TimepickerEvent } from './timepicker-event-interface';
                    [attr.required]="required"
                    [attr.placeholder]="datepickerOptions.placeholder || 'Choose date'"
                    [(ngModel)]="dateModel"
+                   (blur)="onBlur($event)"
                    (keyup)="checkEmptyValue($event)"/>
             <div class="input-group-addon">
                 <span [ngClass]="datepickerOptions.icon || 'glyphicon glyphicon-th'"></span>
@@ -26,6 +27,7 @@ import { TimepickerEvent } from './timepicker-event-interface';
                    [attr.required]="required"
                    [attr.placeholder]="timepickerOptions.placeholder || 'Set time'"
                    [(ngModel)]="timeModel"
+                   (blur)="onBlur($event)"
                    (keyup)="checkEmptyValue($event)">
             <span class="input-group-addon"><i [ngClass]="timepickerOptions.icon || 'glyphicon glyphicon-time'"></i></span>
         </div>
@@ -36,6 +38,7 @@ import { TimepickerEvent } from './timepicker-event-interface';
 
 export class NKDatetime implements ControlValueAccessor, AfterViewInit, OnDestroy, OnChanges {
     @Output() dateChange: EventEmitter<Date> = new EventEmitter<Date>();
+    @Output() blur: EventEmitter<Event> = new EventEmitter<Event>();
     @Input('timepicker') timepickerOptions: any = {};
     @Input('datepicker') datepickerOptions: any = {};
     @Input('hasClearButton') hasClearButton: boolean = false;
@@ -137,6 +140,11 @@ export class NKDatetime implements ControlValueAccessor, AfterViewInit, OnDestro
             this.timepicker.timepicker('setTime', null);
         }
         this.updateDatepicker(null);
+    }
+
+    onBlur(event: Event) {
+        this.blur.emit(event);
+        this.onTouched();
     }
 
     //////////////////////////////////
