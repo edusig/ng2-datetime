@@ -110,7 +110,7 @@ export class NKDatetime implements ControlValueAccessor, AfterViewInit, OnDestro
             setTimeout(() => {
                 this.updateModel(this.date);
             }, 0);
-        } else {
+        } else if(value && value !== null){
             this.clearModels();
         }
     }
